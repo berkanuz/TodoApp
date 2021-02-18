@@ -1,0 +1,10 @@
+﻿<h1 class="mt-5">Welcome to example ToDo application for Inveon Code Test</h1>
+<p class="lead">You can manage your ToDo lists from left side bar menu. Also you can manage the items on details of the lists.</p>
+<p>You can review the <a href="https://github.com/berkanuz/TodoApp">Todo App</a> on git hub..</p>
+
+@if (!string.IsNullOrWhiteSpace(ViewBag.OperationMessage))
+{
+    <script>
+        alert("@Html.Raw(ViewBag.OperationMessage)");
+    </script>
+}

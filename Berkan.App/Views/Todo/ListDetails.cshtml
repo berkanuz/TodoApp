@@ -1,0 +1,71 @@
+﻿@model TodoList
+
+<div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded shadow-sm">
+    <img src="https://cdn2.iconfinder.com/data/icons/business-office-icons/256/To-do_List-512.png" width="48" height="38" style="margin-right:10px" />
+    <div class="lh-1">
+        <h1 class="h6 mb-0 text-white lh-1">@Model.Name</h1>
+    </div>
+    <div class="align-items-right mt-3" style="width:85%"></div>
+    <small class="d-block text-right mt-3">
+        <a class="btn btn-warning" asp-controller="Todo" asp-action="UpdateList" asp-route-listId="@Model.Id"><i class="fa fa-edit"></i>Edit</a>
+    </small>
+</div>
+
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+    @foreach (var item in Model.TodoItems)
+    {
+        <div class="d-flex text-muted pt-3">
+
+            @{
+                double hours = (item.EndDate - DateTime.Now).TotalHours;
+            }
+            <p class="pb-3 mb-0 small lh-sm border-bottom" style="width:100%">
+
+                @if (item.Completed)
+                {
+                    <span class="btn btn-sm btn-success"> Completed</span>
+                }
+                else if (hours > 1)
+                {
+                    <span class="btn btn-sm btn-primary"> More than 1 hour</span>
+                }
+                else if (hours > 0)
+                {
+                    <span class="btn btn-sm btn-warning"> less then 1 hour</span>
+                }
+                else
+                {
+                    <span class="btn btn-sm btn-danger"> Missed!</span>
+                }
+                <a class="btn btn-sm btn-danger pull-right" asp-controller="TodoItem" asp-action="DeleteItem" asp-route-itemId="@item.Id"><i class="fa fa-trash"></i></a>
+                <a class="btn btn-sm btn-warning pull-right" asp-controller="TodoItem" asp-action="UpdateItem" asp-route-itemId="@item.Id"><i class="fa fa-edit"></i></a>
+                @{
+                    var endTime = item.EndDate.AddMilliseconds(-1 * item.EndDate.Millisecond).TimeOfDay;
+                }
+                <strong class="d-block text-gray-dark">@item.EndDate.Date | @endTime </strong>
+                @item.Text
+            </p>
+        </div>
+    }
+    <small class="d-block text-end mt-3">
+        <a class="btn btn-success" asp-controller="TodoItem" asp-action="CreateItem" asp-route-listId="@Model.Id">Create New Item</a>
+    </small>
+
+    @{
+        var missedItems = Model.TodoItems.Where(item => item.EndDate < DateTime.Now && !item.Completed);
+        var incommingItems = Model.TodoItems.Where(item => item.EndDate > DateTime.Now && item.EndDate < DateTime.Now.AddMinutes(10) && !item.Completed);
+
+        <script>
+            @foreach(var item in incommingItems)
+            {
+               @Html.Raw("alert('" + item.Text + " is in comming!');");
+            }
+        </script>
+    }
+    @if (!string.IsNullOrWhiteSpace(ViewBag.OperationMessage))
+    {
+        <script>
+        alert("@Html.Raw(ViewBag.OperationMessage)");
+        </script>
+    }
+</div>

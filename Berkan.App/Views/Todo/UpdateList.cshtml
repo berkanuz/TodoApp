@@ -1,0 +1,26 @@
+﻿@model TodoListModel
+<h2>Update List | @Model.Name</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Update List : @Model.Name</li>
+    </ol>
+</nav>
+<form asp-controller="Todo" asp-action="UpdateList" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="Id" type="hidden" />
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">List Name :</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+@if (!string.IsNullOrWhiteSpace(ViewBag.OperationMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.OperationMessage
+        <br />
+        <a asp-controller="Todo" asp-action="ListDetails" asp-route-listId="@Model.Id">Go to List Details</a>
+    </div>
+}

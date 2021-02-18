@@ -1,0 +1,22 @@
+﻿@model List<TodoList>
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+        <h6>Todo Lists</h6>
+
+        <ul class="nav flex-column">
+            @foreach (var list in Model)
+            {
+                <li class="nav-item border-bottom">
+                    <a class="nav-link" style="display:inline" asp-controller="Todo" asp-action="ListDetails" asp-route-listId="@list.Id">
+                        @list.Name
+                    </a>
+                    <a class="text-danger" asp-controller="Todo" asp-action="DeleteList" asp-route-listId="@list.Id"><i class="fa fa-trash"></i></a>
+                </li>
+            }
+
+            <li class="nav-item mt-2 mb-2 ml-2">
+                <a class="btn btn-success btn-sm " asp-controller="Todo" asp-action="CreateList">Create New list</a>
+            </li>
+        </ul>
+    </div>
+</nav>
